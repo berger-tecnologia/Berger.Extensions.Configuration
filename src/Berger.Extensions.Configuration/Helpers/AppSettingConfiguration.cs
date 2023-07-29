@@ -23,7 +23,7 @@ namespace Berger.Extensions.Configuration
 
             return builder;
         }
-        public static T Teste<T>(this IConfiguration configuration, string key)
+        public static T Get<T>(this IConfiguration configuration, string key)
         {
             return configuration.GetSection(key).Get<T>();
         }
