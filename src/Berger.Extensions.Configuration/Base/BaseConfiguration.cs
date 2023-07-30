@@ -2,32 +2,49 @@
 
 namespace Berger.Extensions.Configuration
 {
-    public class BaseConfiguration
+    public static class BaseConfiguration
     {
         #region Properties
-        public string _file { get; }
-        public IConfiguration Configuration { get; }
-        #endregion
-
-        #region Constructors
-        public BaseConfiguration()
-        {
-            _file = "appsettings.json";
-        }
+        public static IConfiguration Configuration;        
         #endregion
 
         #region Methods
-        public IConfigurationBuilder SetBuilder(string path, string environment)
+        public static void Initialize(IConfiguration configuration)
         {
-            return new ConfigurationBuilder()
-                .SetBasePath(path)
-                .AddJsonFile(_file, false, true)
-                .AddJsonFile($"appsettings.{environment}.json", true);
+            Configuration = configuration;
+        }
+        public static IConfigurationBuilder ConfigureBuilder(this IConfiguration configuration, string path, string environment)
+        {
+            var builder = new BaseConfigurationBuilder();
+
+            return builder
+                .Set(path, environment)
+                .AddEnvironmentVariables();
+        }
+        public static IConfigurationBuilder ConfigureBuilder(this IConfigurationBuilder configuration, string path, string environment)
+        {
+            var builder = new BaseConfigurationBuilder();
+
+            return builder.Set(path, environment);
+        }
+        public static IConfigurationBuilder ConfigureBuilder(this IConfiguration configuration)
+        {
+            var builder = new BaseConfigurationBuilder();
+
+            return builder
+                .Set()
+                .AddEnvironmentVariables();
         }
 
-        public IConfigurationBuilder SetBuilder()
+        public static IConfigurationBuilder ConfigureBuilder(this IConfigurationBuilder configuration)
         {
-            return new ConfigurationBuilder().AddJsonFile(_file, false, true);
+            var builder = new BaseConfigurationBuilder();
+
+            return builder.Set();
+        }
+        public static T Get<T>(this IConfiguration configuration, string key)
+        {
+            return configuration.GetSection(key).Get<T>();
         }
         #endregion
     }
