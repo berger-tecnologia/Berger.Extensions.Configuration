@@ -5,34 +5,42 @@ namespace Berger.Extensions.Configuration
     public static class ConfigurationHelper
     {
         #region Properties
-        public static IConfiguration _configuration;        
+        public static IConfiguration Configuration;        
         #endregion
 
         #region Methods
-        public static void InitializeAppSettings(IConfiguration Configuration)
+        public static void Initialize(IConfiguration configuration)
         {
-            _configuration = Configuration;
+            Configuration = configuration;
         }
-
-        public static IConfigurationBuilder ConfigureAppSettings(this IConfiguration configuration, string path, string environment)
+        public static IConfigurationBuilder ConfigureBuilder(this IConfiguration configuration, string path, string environment)
         {
             var service = new BaseConfiguration();
 
-            var builder = service
-                .Set(path, environment)
+            return service
+                .SetBuilder(path, environment)
                 .AddEnvironmentVariables();
-
-            return builder;
         }
-        public static IConfigurationBuilder ConfigureAppSettings(this IConfiguration configuration)
+        public static IConfigurationBuilder ConfigureBuilder(this IConfigurationBuilder builder, string path, string environment)
         {
             var service = new BaseConfiguration();
 
-            var builder = service
-                .Set()
-                .AddEnvironmentVariables();
+            return service.SetBuilder(path, environment);
+        }
+        public static IConfigurationBuilder ConfigureBuilder(this IConfiguration configuration)
+        {
+            var service = new BaseConfiguration();
 
-            return builder;
+            return service
+                .SetBuilder()
+                .AddEnvironmentVariables();
+        }
+
+        public static IConfigurationBuilder ConfigureBuilder(this IConfigurationBuilder builder)
+        {
+            var service = new BaseConfiguration();
+
+            return service.SetBuilder();
         }
         public static T Get<T>(this IConfiguration configuration, string key)
         {

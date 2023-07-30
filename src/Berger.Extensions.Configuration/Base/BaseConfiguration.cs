@@ -6,7 +6,7 @@ namespace Berger.Extensions.Configuration
     {
         #region Properties
         public string _file { get; }
-        public IConfiguration _configuration { get; }
+        public IConfiguration Configuration { get; }
         #endregion
 
         #region Constructors
@@ -17,7 +17,7 @@ namespace Berger.Extensions.Configuration
         #endregion
 
         #region Methods
-        public IConfigurationBuilder Set(string path, string environment)
+        public IConfigurationBuilder SetBuilder(string path, string environment)
         {
             return new ConfigurationBuilder()
                 .SetBasePath(path)
@@ -25,7 +25,7 @@ namespace Berger.Extensions.Configuration
                 .AddJsonFile($"appsettings.{environment}.json", true);
         }
 
-        public IConfigurationBuilder Set()
+        public IConfigurationBuilder SetBuilder()
         {
             return new ConfigurationBuilder().AddJsonFile(_file, false, true);
         }
