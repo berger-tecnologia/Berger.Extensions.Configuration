@@ -2,15 +2,15 @@
 
 namespace Berger.Extensions.Configuration
 {
-    public class BaseConfiguration
+    public class BaseConfigurationBuilder
     {
         #region Properties
         public string _file { get; }
-        public IConfiguration _configuration { get; }
+        public IConfiguration Configuration { get; }
         #endregion
 
         #region Constructors
-        public BaseConfiguration()
+        public BaseConfigurationBuilder()
         {
             _file = "appsettings.json";
         }
