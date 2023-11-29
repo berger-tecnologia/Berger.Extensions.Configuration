@@ -7,7 +7,14 @@ namespace Berger.Extensions.Configuration
         #region Methods
         public static T GetParse<T>(this IConfiguration configuration, string key)
         {
-            return configuration.GetSection(key).Get<T>();
+            var section = configuration.GetSection(key);
+
+            if (section.Exists())
+            {
+                return section.Get<T>();
+            }
+
+            return default(T);
         }
         #endregion
     }
