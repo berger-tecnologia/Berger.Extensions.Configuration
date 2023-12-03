@@ -4,6 +4,10 @@ namespace Berger.Extensions.Configuration
 {
     public static class ConfigurationHelper
     {
+        #region Properties
+        public static IConfiguration Configuration;
+        #endregion
+
         #region Methods
         public static T GetParse<T>(this IConfiguration configuration, string key)
         {
@@ -15,6 +19,10 @@ namespace Berger.Extensions.Configuration
             }
 
             return default(T);
+        }
+        public static void Initialize(IConfiguration configuration)
+        {
+            Configuration = configuration;
         }
         #endregion
     }
