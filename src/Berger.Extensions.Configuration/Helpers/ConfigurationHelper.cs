@@ -24,6 +24,17 @@ namespace Berger.Extensions.Configuration
         {
             Configuration = configuration;
         }
+        public static IConfigurationBuilder ConfigureAppSettings(this IConfiguration configuration)
+        {
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true);
+
+            return builder;
+        }
+
+        public static T Get<T>(this IConfiguration configuration, string key)
+        {
+            return configuration.GetSection(key).Get<T>();
+        }
         #endregion
     }
 }
