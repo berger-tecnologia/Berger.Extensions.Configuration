@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Berger.Extensions.Configuration
 {
@@ -30,10 +31,16 @@ namespace Berger.Extensions.Configuration
 
             return builder;
         }
-
         public static T Get<T>(this IConfiguration configuration, string key)
         {
             return configuration.GetSection(key).Get<T>();
+        }
+        public static IServiceCollection SetConfiguration(this IServiceCollection services, IConfiguration Configuration)
+        {
+            // Configurations
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            return services;
         }
         #endregion
     }

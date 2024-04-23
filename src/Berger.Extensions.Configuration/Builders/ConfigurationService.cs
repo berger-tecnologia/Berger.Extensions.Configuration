@@ -29,7 +29,6 @@ namespace Berger.Extensions.Configuration
         {
             return new ConfigurationBuilder().AddJsonFile(_file, false, true).Build();
         }
-
         public IConfigurationRoot Build(string path, string environment)
         {
             return new ConfigurationBuilder()
