@@ -1,54 +1,46 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Berger.Extensions.Configuration
 {
     public static class ConfigurationHelper
     {
+        #region Properties
+        public static IConfiguration Configuration;
+        #endregion
+
         #region Methods
-        public static IConfigurationBuilder ConfigureBuilder(this IConfiguration configuration, string path, string environment)
+        public static T GetParse<T>(this IConfiguration configuration, string key)
         {
-            var builder = new BaseConfiguration();
+            var section = configuration.GetSection(key);
 
-            return builder
-                .Set(path, environment)
-                .AddEnvironmentVariables();
+            if (section.Exists())
+            {
+                return section.Get<T>();
+            }
+
+            return default(T);
         }
-        public static IConfigurationBuilder ConfigureBuilder(this IConfigurationBuilder configuration, string path, string environment)
+        public static void Initialize(IConfiguration configuration)
         {
-            var builder = new BaseConfiguration();
-
-            return builder.Set(path, environment);
+            Configuration = configuration;
         }
-        public static IConfigurationBuilder ConfigureBuilder(this IConfiguration configuration)
+        public static IConfigurationBuilder ConfigureAppSettings(this IConfiguration configuration)
         {
-            var builder = new BaseConfiguration();
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true);
 
-            return builder
-                .Set()
-                .AddEnvironmentVariables();
-        }
-
-        public static IConfigurationBuilder ConfigureBuilder(this IConfigurationBuilder configuration)
-        {
-            var builder = new BaseConfiguration();
-
-            return builder.Set();
-        }
-        public static IConfigurationRoot Build(this IConfiguration configuration, string path, string environment)
-        {
-            var builder = new BaseConfiguration();
-
-            return builder.Set(path, environment).Build();
-        }
-        public static IConfigurationRoot Build(this IConfiguration configuration, string directory = "")
-        {
-            var builder = new BaseConfiguration();
-
-            return builder.Set(directory).Build();
+            return builder;
         }
         public static T Get<T>(this IConfiguration configuration, string key)
         {
             return configuration.GetSection(key).Get<T>();
+        }
+        public static IServiceCollection SetConfiguration(this IServiceCollection services, IConfiguration Configuration)
+        {
+            // Configurations
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            return services;
         }
         #endregion
     }
