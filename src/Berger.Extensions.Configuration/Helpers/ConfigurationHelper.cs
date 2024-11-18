@@ -15,9 +15,7 @@ namespace Berger.Extensions.Configuration
             var section = configuration.GetSection(key);
 
             if (section.Exists())
-            {
                 return section.Get<T>();
-            }
 
             return default(T);
         }
@@ -41,6 +39,18 @@ namespace Berger.Extensions.Configuration
             services.AddSingleton<IConfiguration>(Configuration);
 
             return services;
+        }
+        public static string GetConnection(this IConfiguration configuration, string pattern)
+        {
+            if (string.IsNullOrWhiteSpace(pattern))
+                throw new ArgumentException("The connection pattern cannot be null or empty.", nameof(pattern));
+
+            var connection = configuration.GetSection(pattern).Value;
+
+            if (string.IsNullOrEmpty(connection))
+                throw new FileNotFoundException($"Connection string not found for pattern: {pattern}");
+
+            return connection;
         }
         #endregion
     }
