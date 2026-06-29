@@ -25,9 +25,7 @@ namespace Berger.Extensions.Configuration
         }
         public static IConfigurationBuilder ConfigureAppSettings(this IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true);
-
-            return builder;
+            return new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true);
         }
         public static T Get<T>(this IConfiguration configuration, string key)
         {
@@ -51,6 +49,16 @@ namespace Berger.Extensions.Configuration
                 throw new FileNotFoundException($"Connection string not found for pattern: {pattern}");
 
             return connection;
+        }
+
+        public static IConfigurationRoot Build(string[] args)
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .Build();
         }
         #endregion
     }
